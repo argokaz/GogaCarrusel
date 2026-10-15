@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pagas 1000 megas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0C0E;
+    --card:#15171B;
+    --card2:#1C1F24;
+    --line:#2A2E35;
+    --ink:#F3F1EC;
+    --mute:#8D929B;
+    --dim:#4A4F57;
+    --lime:#D4FF3A;
+    --red:#FF4A3D;
+    --pad:80px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#000;font-family:'Archivo',sans-serif;color:var(--ink);display:flex;flex-direction:column;gap:40px;padding:40px;align-items:center}
+  .slide{width:1080px;height:1350px;background:var(--bg);position:relative;overflow:hidden;padding:150px var(--pad) 140px}
+  /* subtle grid texture */
+  .slide::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:90px 90px;opacity:.18;pointer-events:none}
+  .slide > *{position:relative}
+
+  /* chrome */
+  .top{position:absolute;top:60px;left:var(--pad);right:var(--pad);display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:22px;letter-spacing:.04em;color:var(--mute)}
+  .top b{color:var(--ink);font-weight:500}
+  .top .dot{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--lime);margin-right:14px;vertical-align:middle;box-shadow:0 0 18px var(--lime)}
+  .bottom{position:absolute;bottom:62px;left:var(--pad);right:var(--pad);display:flex;align-items:center;gap:28px}
+  .prog{display:flex;gap:8px;flex:1}
+  .prog i{height:5px;flex:1;background:var(--line);border-radius:3px}
+  .prog i.on{background:var(--lime)}
+  .swipe{font-family:'JetBrains Mono',monospace;font-size:20px;letter-spacing:.12em;color:var(--mute)}
+
+  /* type */
+  .k{font-family:'JetBrains Mono',monospace;font-size:24px;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);margin-bottom:28px}
+  .h{font-weight:900;font-stretch:72%;font-size:104px;line-height:.92;letter-spacing:-.01em;text-transform:uppercase}
+  .h .l{color:var(--lime)} .h .r{color:var(--red)} .h .m{color:var(--mute)}
+  .p{font-size:36px;line-height:1.3;font-weight:400;color:#D9D7D1}
+  .p b{color:var(--ink);font-weight:700}
+  .p .l{color:var(--lime);font-weight:700}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:20px;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;border-radius:6px}
+
+  /* ========== 01 COVER ========== */
+  .cover .h{line-height:.94}
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:52px 0 52px}
+  .vs .c{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px 32px 32px}
+  .vs .lb{display:block;font-family:'JetBrains Mono',monospace;font-size:22px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+  .vs .n{display:flex;align-items:flex-end;gap:14px;font-weight:900;font-stretch:62%;font-size:150px;line-height:.85;margin:16px 0 22px}
+  .vs .n small{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:500;color:var(--mute);margin-bottom:12px}
+  .cover .meter{height:14px;background:var(--card2);border-radius:7px;position:relative;overflow:hidden}
+  .cover .meter i{position:absolute;left:0;top:0;bottom:0;border-radius:7px}
+  .chips{display:flex;flex-wrap:wrap;gap:12px}
+  .chips span{font-family:'JetBrains Mono',monospace;font-size:23px;padding:12px 18px;border-radius:999px;border:1.5px solid var(--dim);color:var(--ink)}
+  .chips span.hl{background:var(--lime);border-color:var(--lime);color:#0B0C0E;font-weight:700}
+
+  /* ========== 02 ========== */
+  .bar{display:flex;height:110px;border-radius:14px;overflow:hidden;margin:72px 0 16px}
+  .bar .a{background:var(--lime);color:#0B0C0E;flex:94;display:flex;align-items:center;padding-left:30px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:30px}
+  .bar .b{flex:6;background:repeating-linear-gradient(45deg,#3a3f47 0 8px,#22252b 8px 16px)}
+  .barlab{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:21px;color:var(--mute);margin-bottom:72px}
+  .unit{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:34px 40px}
+  .unit .eq{font-weight:900;font-stretch:68%;font-size:92px;line-height:1;text-transform:uppercase;margin:14px 0 18px}
+  .unit .eq span{color:var(--lime)}
+
+  /* ========== 03 chart ========== */
+  .chart{margin:48px 0 0}
+  .row{margin-bottom:34px}
+  .row .t{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+  .row .t b{font-weight:800;font-stretch:80%;font-size:40px;text-transform:uppercase}
+  .row .t span{font-family:'JetBrains Mono',monospace;font-size:28px;color:var(--ink)}
+  .track{height:48px;background:var(--card);border-radius:10px;position:relative;overflow:hidden}
+  .track i{position:absolute;top:0;bottom:0;left:0;border-radius:10px}
+  .scale{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:19px;color:var(--dim);margin-top:-22px;margin-bottom:46px}
+  .callout{background:var(--red);color:#120403;border-radius:20px;padding:28px 36px;font-size:36px;line-height:1.25;font-weight:600}
+  .callout b{font-weight:900}
+
+  /* ========== 04 bands ========== */
+  .wifi{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:14px 0;margin:52px 0 40px}
+  .wifi .net{display:flex;align-items:center;gap:26px;padding:22px 36px;font-size:34px;font-weight:600}
+  .wifi .net + .net{border-top:1px solid var(--line)}
+  .wifi .net.pick{background:rgba(212,255,58,.08)}
+  .wifi .net .ic{width:44px;height:44px;flex:none}
+  .wifi .net .go{margin-left:auto}
+  .bands{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+  .band{background:var(--card);border:2px solid var(--line);border-radius:22px;padding:38px 36px;display:flex;flex-direction:column}
+  .band.pick{border-color:var(--lime)}
+  .band .ghz{font-weight:900;font-stretch:65%;font-size:120px;line-height:.85}
+  .band .ghz small{font-size:44px;font-stretch:80%}
+  .band .d{font-size:29px;line-height:1.3;color:#D9D7D1;margin:20px 0 28px;min-height:114px}
+  .meterline{display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:19px;letter-spacing:.1em;color:var(--mute);margin-top:12px}
+  .pips{display:flex;gap:6px}
+  .pips i{width:26px;height:12px;border-radius:3px;background:var(--line)}
+  .pips i.on{background:var(--ink)}
+  .band.pick .pips i.on{background:var(--lime)}
+
+  /* ========== 05 router ========== */
+  .plans{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin:40px 0 32px}
+  .plan{background:var(--card);border-radius:22px;padding:26px;border:1px solid var(--line)}
+  .house{height:180px;border:3px solid var(--dim);border-radius:6px;position:relative;overflow:hidden;background:
+      linear-gradient(var(--dim),var(--dim)) 55% 0/3px 46% no-repeat,
+      linear-gradient(var(--dim),var(--dim)) 0 58%/40% 3px no-repeat,
+      linear-gradient(var(--dim),var(--dim)) 100% 52%/30% 3px no-repeat}
+  .house .wave{position:absolute;width:420px;height:420px;border-radius:50%;transform:translate(-50%,-50%)}
+  .house .rt{position:absolute;width:26px;height:26px;border-radius:6px;transform:translate(-50%,-50%)}
+  .plan .cap{display:flex;justify-content:space-between;align-items:center;margin-top:20px;font-family:'JetBrains Mono',monospace;font-size:21px;color:var(--mute)}
+  .list{display:flex;flex-direction:column;gap:12px}
+  .li{display:flex;align-items:center;gap:26px;font-size:32px;line-height:1.2}
+  .li .x,.li .ok{width:52px;height:52px;flex:none;border-radius:50%;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:28px}
+  .li .x{background:rgba(255,74,61,.14);color:var(--red)}
+  .li .ok{background:var(--lime);color:#0B0C0E}
+  .li b{font-weight:700}
+  .note{margin-top:28px;font-size:30px;line-height:1.3;color:var(--mute);border-top:1px solid var(--line);padding-top:24px}
+  .note b{color:var(--ink)}
+
+  /* ========== 06 cable ========== */
+  .checks{margin-top:36px;display:flex;flex-direction:column;gap:22px}
+  .chk{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px 36px;display:grid;grid-template-columns:96px 1fr;gap:10px 26px}
+  .chk .n{grid-row:span 2;font-weight:900;font-stretch:62%;font-size:110px;line-height:.8;color:var(--lime)}
+  .chk h3{font-weight:900;font-stretch:72%;font-size:50px;text-transform:uppercase;line-height:1}
+  .chk .p{font-size:30px}
+  .cats{display:flex;gap:12px;margin-top:18px;grid-column:2}
+  .cats span{font-family:'JetBrains Mono',monospace;font-size:21px;padding:9px 14px;border-radius:6px}
+
+  /* ========== 07 steps ========== */
+  .steps{margin-top:64px;display:flex;flex-direction:column;gap:18px}
+  .st{display:flex;align-items:center;gap:30px;padding:34px 34px;border-radius:18px;background:var(--card);border:1px solid var(--line)}
+  .st .n{font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;color:var(--mute);width:44px}
+  .st .p{font-size:33px}
+  .st.hl{background:var(--lime);border-color:var(--lime);padding:44px 34px}
+  .st.hl .n{color:#0B0C0E}
+  .st.hl .p{color:#0B0C0E}
+  .st.hl .p b{color:#0B0C0E;font-weight:900;font-stretch:75%;font-size:52px;text-transform:uppercase;display:block;line-height:1;margin-bottom:6px}
+  .st.hl .p small{font-family:'JetBrains Mono',monospace;font-size:22px;letter-spacing:.06em}
+
+  /* ========== 08 law ========== */
+  .seventy{display:flex;align-items:flex-end;gap:34px;margin:10px 0 26px}
+  .seventy .num{font-weight:900;font-stretch:62%;font-size:360px;line-height:.78;color:var(--lime);letter-spacing:-.03em}
+  .seventy .p{font-size:36px;padding-bottom:12px}
+  .lawbar{position:relative;margin:30px 0 64px}
+  .lawbar .tr{height:70px;border-radius:12px;background:var(--card);border:1px solid var(--line);position:relative;overflow:hidden}
+  .lawbar .tr i{position:absolute;inset:0 30% 0 0;background:repeating-linear-gradient(90deg,rgba(212,255,58,.22) 0 2px,transparent 2px 14px);border-right:4px solid var(--lime)}
+  .lawbar .lbls{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--mute);margin-top:14px;position:relative}
+  .lawbar .lbls .mk{position:absolute;left:70%;transform:translateX(-50%);color:var(--lime);font-weight:700}
+  .flow{display:flex;flex-direction:column;gap:18px}
+  .fl{display:flex;gap:26px;align-items:center;font-size:33px}
+  .fl .n{width:58px;height:58px;border:2px solid var(--lime);color:var(--lime);border-radius:50%;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:26px;flex:none}
+  .fn{position:absolute;left:var(--pad);bottom:110px;font-family:'JetBrains Mono',monospace;font-size:18px;color:var(--dim)}
+
+  /* ========== 09 map ========== */
+  .map{margin:40px 0 34px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:30px;position:relative}
+  .map .grid{display:grid;grid-template-columns:repeat(20,1fr);gap:6px}
+  .map .grid i{aspect-ratio:1;border-radius:5px}
+  .map .lg{display:flex;align-items:center;gap:14px;margin-top:22px;font-family:'JetBrains Mono',monospace;font-size:19px;color:var(--mute)}
+  .map .lg .g{height:10px;flex:0 0 220px;border-radius:5px;background:linear-gradient(90deg,var(--red),#FFB23D,var(--lime))}
+  .map .il{margin-left:auto;color:var(--dim)}
+  .brand{display:inline-flex;align-items:center;gap:14px;background:var(--lime);color:#0B0C0E;border-radius:10px;padding:10px 18px 10px 14px;font-weight:900;font-stretch:72%;font-size:34px;text-transform:uppercase;vertical-align:middle}
+  .brand .pin{width:20px;height:20px;border-radius:50% 50% 50% 0;background:#0B0C0E;transform:rotate(-45deg)}
+  .uses{display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;margin-top:30px}
+  .use{border-top:4px solid var(--lime);padding-top:20px}
+  .use h4{font-weight:900;font-stretch:68%;font-size:34px;text-transform:uppercase;line-height:1;margin-bottom:12px}
+  .use p{font-size:25px;line-height:1.3;color:#D9D7D1}
+
+  /* ========== 10 CTA ========== */
+  .cta .h{font-size:112px}
+  .acts{display:flex;flex-direction:column;gap:16px;margin-top:48px}
+  .act{display:flex;align-items:center;gap:30px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px 36px}
+  .act .v{font-weight:900;font-stretch:62%;font-size:62px;text-transform:uppercase;line-height:1;width:300px;flex:none}
+  .act .p{font-size:30px}
+  .act.hl{background:var(--lime);border-color:var(--lime)}
+  .act.hl .v,.act.hl .p,.act.hl .p b{color:#0B0C0E}
+  .sig{margin-top:40px;display:flex;justify-content:space-between;align-items:center}
+  .sig .hn{font-weight:900;font-stretch:70%;font-size:56px}
+</style>
+</head>
+<body>
+
+<!-- ===================== 01 COVER ===================== -->
+<section class="slide cover" id="s1">
+  <div class="top"><span><i class="dot"></i><b>@arturogoga</b></span><span>01 / 10</span></div>
+  <div class="k">Guía · Internet en casa</div>
+  <h1 class="h" style="font-size:150px">¿Problemas<br>con tu<br><span class="l">internet?</span></h1>
+
+  <div class="vs">
+    <div class="c"><span class="lb">Pagas</span><span class="n">1000<small>Mbps</small></span><div class="meter"><i style="width:100%;background:var(--ink)"></i></div></div>
+    <div class="c"><span class="lb">Te llegan</span><span class="n" style="color:var(--red)">300<small>Mbps</small></span><div class="meter"><i style="width:30%;background:var(--red)"></i></div></div>
+  </div>
+
+  <p class="p" style="font-size:38px;margin-bottom:24px"><b>Antes de reclamar a tu operador, revisa esto:</b></p>
+  <div class="chips">
+    <span>WiFi vs cable</span><span>2.4 vs 5 GHz</span><span>Tu router</span><span>Cables y puertos</span><span>Cómo medir</span><span class="hl">Cuándo reclamar</span><span>Tu distrito</span>
+  </div>
+
+  <div class="bottom"><div class="prog"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="swipe">DESLIZA →</span></div>
+</section>
+
+<!-- ===================== 02 ===================== -->
+<section class="slide" id="s2">
+  <div class="top"><span><i class="dot"></i><b>@arturogoga</b></span><span>02 / 10</span></div>
+  <div class="k">01 · Primero lo primero</div>
+  <h1 class="h" style="font-size:172px">940 <span class="l">es</span> 1000.</h1>
+  <p class="p" style="margin-top:56px">Si <b>por cable</b> te sale <span class="l">~940 Mbps</span>, tu conexión está perfecta. Ese ~6% se va en el “empaquetado” de los datos. <b>Es física, no robo.</b></p>
+
+  <div class="bar"><div class="a">940 Mbps · tus datos</div><div class="b"></div></div>
+  <div class="barlab"><span>Conexión gigabit (1000 Mbps)</span><span>~6% empaquetado ↑</span></div>
+
+  <div class="unit">
+    <span class="tag" style="background:var(--card2);color:var(--lime)">Ojo con las unidades</span>
+    <div class="eq">1000 Mbps <span>=</span> 125 MB/s</div>
+    <p class="p" style="font-size:30px">Mega<b>bits</b> no son Mega<b>bytes</b>. Si tu descarga dice “115 MB/s”, estás volando.</p>
+  </div>
+
+  <div class="bottom"><div class="prog"><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="swipe">DESLIZA →</span></div>
+</section>
+
+<!-- ===================== 03 ===================== -->
+<section class="slide" id="s3">
+  <div class="top"><span><i class="dot"></i><b>@arturogoga</b></span><span>03 / 10</span></div>
+  <div class="k">02 · El culpable #1</div>
+  <h1 class="h">El WiFi <span class="r">nunca</span><br>rinde como<br>el cable.</h1>
+
+  <div class="chart">
+    <div class="row">
+      <div class="t"><b>Cable</b><span>~940 Mbps</span></div>
+      <div class="track"><i style="width:94%;background:var(--lime)"></i></div>
+    </div>
+    <div class="row">
+      <div class="t"><b>WiFi 6 · 6E · 7</b><span>800+ Mbps*</span></div>
+      <div class="track"><i style="width:82%;background:linear-gradient(90deg,#8FAD27,var(--lime))"></i></div>
+    </div>
+    <div class="row">
+      <div class="t"><b>WiFi 5</b><span>300–600 Mbps</span></div>
+      <div class="track"><i style="width:60%;background:linear-gradient(90deg,#5C636D 0 50%,#9AA1AB 50%)"></i></div>
+    </div>
+    <div class="scale"><span>0</span><span>250</span><span>500</span><span>750</span><span>1000</span></div>
+  </div>
+  <p class="mono" style="font-size:21px;color:var(--mute);margin:-20px 0 34px">*Cerca del router y solo si tu router <b style="color:var(--ink)">Y</b> tu celular lo soportan.</p>
+
+  <div class="callout">Un celular de hace 5 años <b>no llega a 1000</b>, aunque tengas el mejor plan.</div>
+
+  <div class="bottom"><div class="prog"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="swipe">DESLIZA →</span></div>
+</section>
+
+<!-- ===================== 04 ===================== -->
+<section class="slide" id="s4">
+  <div class="top"><span><i class="dot"></i><b>@arturogoga</b></span><span>04 / 10</span></div>
+  <div class="k">03 · Las dos redes</div>
+  <h1 class="h">¿Ves dos WiFi?<br>Conéctate a<br>la <span class="l">“-5G”</span>.</h1>
+
+  <div class="wifi">
+    <div class="net">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#8D929B" stroke-width="2.2" stroke-linecap="round"><path d="M2 8.5a15 15 0 0 1 20 0"/><path d="M5.5 12a10 10 0 0 1 13 0"/><path d="M9 15.5a5 5 0 0 1 6 0"/><circle cx="12" cy="19" r="1.2" fill="#8D929B"/></svg>
+      <span style="color:var(--mute)">TU_RED</span><span class="go mono" style="font-size:22px;color:var(--dim)">2.4 GHz</span>
+    </div>
+    <div class="net pick">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#D4FF3A" stroke-width="2.2" stroke-linecap="round"><path d="M2 8.5a15 15 0 0 1 20 0"/><path d="M5.5 12a10 10 0 0 1 13 0"/><path d="M9 15.5a5 5 0 0 1 6 0"/><circle cx="12" cy="19" r="1.2" fill="#D4FF3A"/></svg>
+      <span>TU_RED<span style="color:var(--lime)">-5G</span></span><span class="go tag" style="background:var(--lime);color:#0B0C0E">← esta</span>
+    </div>
+  </div>
+
+  <div class="bands">
+    <div class="band">
+      <div class="ghz">2.4<small> GHz</small></div>
+      <p class="d">Llega más lejos, pero es lenta. Normalmente <b>menos de 100 Mbps</b>.</p>
+      <div class="meterline">ALCANCE<span class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+      <div class="meterline">VELOCIDAD<span class="pips"><i class="on"></i><i></i><i></i><i></i><i></i></span></div>
+    </div>
+    <div class="band pick">
+      <div class="ghz" style="color:var(--lime)">5<small> GHz</small></div>
+      <p class="d">Mucho más rápida, pero <b>le cuestan las paredes</b>. Úsala si estás cerca del router.</p>
+      <div class="meterline">ALCANCE<span class="pips"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span></div>
+      <div class="meterline">VELOCIDAD<span class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+    </div>
+  </div>
+
+  <div class="bottom"><div class="prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="swipe">DESLIZA →</span></div>
+</section>
+
+<!-- ===================== 05 ===================== -->
+<section class="slide" id="s5">
+  <div class="top"><span><i class="dot"></i><b>@arturogoga</b></span><span>05 / 10</span></div>
+  <div class="k">04 · Ubicación</div>
+  <h1 class="h" style="font-size:96px">Tu router no<br>es adorno.<br><span class="l">Sácalo del mueble.</span></h1>
+
+  <div class="plans">
+    <div class="plan">
+      <div class="house">
+        <div class="wave" style="left:8%;top:88%;background:radial-gradient(circle,rgba(255,74,61,.55) 0,rgba(255,74,61,.18) 35%,transparent 62%)"></div>
+        <div class="rt" style="left:8%;top:88%;background:var(--red)"></div>
+      </div>
+      <div class="cap"><span>En una esquina</span><span class="tag" style="background:rgba(255,74,61,.15);color:var(--red)">mal</span></div>
+    </div>
+    <div class="plan">
+      <div class="house">
+        <div class="wave" style="left:50%;top:50%;background:radial-gradient(circle,rgba(212,255,58,.5) 0,rgba(212,255,58,.16) 45%,transparent 66%)"></div>
+        <div class="rt" style="left:50%;top:50%;background:var(--lime)"></div>
+      </div>
+      <div class="cap"><span>Al centro</span><span class="tag" style="background:var(--lime);color:#0B0C0E">bien</span></div>
+    </div>
+  </div>
+
+  <div class="list">
+    <div class="li"><span class="x">✕</span><span>Dentro de un mueble o detrás de la tele</span></div>
+    <div class="li"><span class="x">✕</span><span>En una esquina, al ras del piso</span></div>
+    <div class="li"><span class="x">✕</span><span>Junto al microondas, espejos o peceras</span></div>
+    <div class="li"><span class="ok">✓</span><span><b>Alto, al centro y despejado</b></span></div>
+  </div>
+  <p class="note">¿Casa grande? Necesitas <b>mesh</b>, no un repetidor barato.</p>
+
+  <div class="bottom"><div class="prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div><span class="swipe">DESLIZA →</span></div>
+</section>
+
+<!-- ===================== 06 ===================== -->
+<section class="slide" id="s6">
+  <div class="top"><span><i class="dot"></i><b>@arturogoga</b></span><span>06 / 10</span></div>
+  <div class="k">05 · ¿Y por cable?</div>
+  <h1 class="h">“¡Por cable<br><span class="r">tampoco llega!”</span></h1>
+  <p class="p" style="margin-top:28px;color:var(--mute)">Revisa estas tres cosas:</p>
+
+  <div class="checks">
+    <div class="chk">
+      <div class="n">1</div>
+      <h3>El cable</h3>
+      <p class="p">Un cable <b>Cat5</b> antiguo puede quedarse en 100 Mbps. La categoría viene impresa en el cable.</p>
+      <div class="cats">
+        <span style="background:rgba(255,74,61,.15);color:var(--red)">CAT5 → 100</span>
+        <span style="background:rgba(212,255,58,.14);color:var(--lime)">CAT5e → 1000</span>
+        <span style="background:rgba(212,255,58,.14);color:var(--lime)">CAT6 → 1000+</span>
+      </div>
+    </div>
+    <div class="chk">
+      <div class="n">2</div>
+      <h3>El puerto</h3>
+      <p class="p">Muchas laptops y adaptadores USB baratos son de <b>100 Mbps</b>. Revisa que diga “Gigabit”.</p>
+    </div>
+    <div class="chk">
+      <div class="n">3</div>
+      <h3>La red</h3>
+      <p class="p">¿Alguien está viendo <b>Netflix en 4K</b> o descargando un juego mientras mides?</p>
+    </div>
+  </div>
+
+  <div class="bottom"><div class="prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i></div><span class="swipe">DESLIZA →</span></div>
+</section>
+
+<!-- ===================== 07 ===================== -->
+<section class="slide" id="s7">
+  <div class="top"><span><i class="dot"></i><b>@arturogoga</b></span><span>07 / 10</span></div>
+  <div class="k">06 · Mide como pro</div>
+  <h1 class="h">Cómo medir<br><span class="l">bien</span> tu internet</h1>
+
+  <div class="steps">
+    <div class="st"><span class="n">01</span><p class="p">Por <b>cable</b>, directo al router del operador.</p></div>
+    <div class="st"><span class="n">02</span><p class="p">Los demás equipos, <b>desconectados</b> o en pausa.</p></div>
+    <div class="st hl"><span class="n">03</span><p class="p"><b>Mide en Prueba tu Plan</b><small>MI WEB DE MEDICIONES · LINK EN LA BIO</small></p></div>
+    <div class="st"><span class="n">04</span><p class="p">Repite a distintas horas: <b>mañana, tarde y noche</b>.</p></div>
+    <div class="st"><span class="n">05</span><p class="p">Guarda <b>captura</b> de cada resultado. Es tu evidencia.</p></div>
+  </div>
+
+  <div class="bottom"><div class="prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div><span class="swipe">DESLIZA →</span></div>
+</section>
+
+<!-- ===================== 08 ===================== -->
+<section class="slide" id="s8">
+  <div class="top"><span><i class="dot"></i><b>@arturogoga</b></span><span>08 / 10</span></div>
+  <div class="k">07 · ¿Cuándo SÍ reclamar?</div>
+
+  <div class="seventy">
+    <div class="num">70%</div>
+  </div>
+  <p class="p" style="font-size:40px">Es la velocidad mínima que tu operador <b>debe garantizarte por ley</b>.</p>
+
+  <div class="lawbar">
+    <div class="tr"><i></i></div>
+    <div class="lbls"><span>0</span><span class="mk">▲ 700 Mbps mínimo</span><span>1000</span></div>
+  </div>
+
+  <p class="p" style="margin-bottom:32px">Si pagas 1000 y <b>por cable</b> no llegas a <span class="l">700 Mbps</span> en varias pruebas:</p>
+  <div class="flow">
+    <div class="fl"><span class="n">1</span><span>Reclama al operador con tus capturas.</span></div>
+    <div class="fl"><span class="n">2</span><span>Anota tu <b>código de reclamo</b>.</span></div>
+    <div class="fl"><span class="n">3</span><span>¿No te hacen caso? Apela ante <b>OSIPTEL</b>.</span></div>
+  </div>
+
+  <div class="fn">Ley N.° 31207 · Velocidad mínima garantizada</div>
+  <div class="bottom"><div class="prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div><span class="swipe">DESLIZA →</span></div>
+</section>
+
+<!-- ===================== 09 ===================== -->
+<section class="slide" id="s9">
+  <div class="top"><span><i class="dot"></i><b>@arturogoga</b></span><span>09 / 10</span></div>
+  <div class="k">08 · Antes de contratar</div>
+  <h1 class="h">¿Cómo está el<br>internet en<br><span class="l">tu distrito?</span></h1>
+
+  <div class="map">
+    <div class="grid" id="grid"></div>
+    <div class="lg"><span>PEOR</span><span class="g"></span><span>MEJOR</span><span class="il">Imagen ilustrativa</span></div>
+  </div>
+
+  <p class="p" style="font-size:33px">En <span class="brand"><i class="pin"></i>Prueba tu Plan</span> ves la calidad real del internet <b>por provincia y distrito</b>, con mediciones de usuarios como tú.</p>
+
+  <div class="uses">
+    <div class="use"><h4>¿Te mudas?</h4><p>Mira qué operador va mejor en tu zona.</p></div>
+    <div class="use"><h4>¿Vas a contratar?</h4><p>Compara antes de firmar.</p></div>
+    <div class="use"><h4>¿Ya mediste?</h4><p>Cada medición hace el mapa más preciso.</p></div>
+  </div>
+
+  <div class="bottom"><div class="prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div><span class="swipe">DESLIZA →</span></div>
+</section>
+
+<!-- ===================== 10 ===================== -->
+<section class="slide cta" id="s10">
+  <div class="top"><span><i class="dot"></i><b>@arturogoga</b></span><span>10 / 10</span></div>
+  <div class="k">Resumen</div>
+  <h1 class="h">Antes de<br>pelearte con<br>tu operador,<br><span class="l">revisa tu casa.</span></h1>
+
+  <div class="acts">
+    <div class="act"><span class="v">Guárdalo</span><p class="p">para el día que tu internet “no da”.</p></div>
+    <div class="act"><span class="v">Compártelo</span><p class="p">con ese amigo que siempre se queja de su internet.</p></div>
+    <div class="act hl"><span class="v">Mide</span><p class="p"><b>en Prueba tu Plan</b> y compáralo con tu distrito. Link en la bio.</p></div>
+  </div>
+
+  <div class="sig"><span class="hn">@arturogoga</span><span class="mono" style="font-size:22px;color:var(--mute)">SÍGUEME PARA MÁS</span></div>
+  <div class="bottom"><div class="prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div></div>
+</section>
+
+<script>
+  // Abstract "district" heat tiles (illustrative only, not real data)
+  const g = document.getElementById('grid');
+  const cols = ['#FF4A3D','#FF7A3D','#FFB23D','#E8E33A','#D4FF3A'];
+  let seed = 7;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let r = 0; r < 5; r++) for (let c = 0; c < 20; c++) {
+    const i = document.createElement('i');
+    // rough blob shape so it reads as a map, not a table
+    const dx = (c - 9.5) / 10, dy = (r - 2) / 2.7;
+    const inside = dx*dx + dy*dy + rnd()*0.35 < 1.05;
+    if (!inside) { i.style.background = 'transparent'; }
+    else {
+      const v = Math.min(4, Math.max(0, Math.round(2 + 1.6*Math.sin(c*0.7 + r*1.3) + (rnd()-0.5)*2)));
+      i.style.background = cols[v];
+      i.style.opacity = 0.55 + rnd()*0.45;
+    }
+    g.appendChild(i);
+  }
+</script>
+</body>
+</html>
